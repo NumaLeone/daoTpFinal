@@ -1,6 +1,6 @@
 package dao.daoTpFinal.model.Employee;
 
-import dao.daoTpFinal.model.Payroll.Payroll;
+import dao.daoTpFinal.model.Contract.Contract;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "employees", schema = "payroll")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Employee {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +21,7 @@ public abstract class Employee {
     private String contactDetails;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Payroll> payrolls = new ArrayList<>();
+    private List <Contract> contracts = new ArrayList<>();
 
     public void setName(String name){
         this.name = name;
@@ -43,13 +43,15 @@ public abstract class Employee {
         return contactDetails;
     }
 
-    public abstract double calculateSalary();
-
-    public List<Payroll> getPayrolls() {
-        return payrolls;
+    public double calculateSalary(){
+        return 0;
     }
 
-    public void setPayrolls(List<Payroll> payrolls) {
-        this.payrolls = payrolls;
+    public List<Contract> getContracts() {
+        return contracts;
+    }
+
+    public void setPayrolls(List<Contract> contracts) {
+        this.contracts = contracts;
     }
 }

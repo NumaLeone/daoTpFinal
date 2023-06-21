@@ -1,5 +1,4 @@
 package dao.daoTpFinal.EmployeesTest;
-import dao.daoTpFinal.model.Employee.FullTimeEmployee;
 import dao.daoTpFinal.service.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

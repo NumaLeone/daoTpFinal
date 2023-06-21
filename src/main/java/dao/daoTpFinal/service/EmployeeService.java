@@ -1,9 +1,6 @@
 package dao.daoTpFinal.service;
 
-import dao.daoTpFinal.model.Employee.ContractEmployee;
 import dao.daoTpFinal.model.Employee.Employee;
-import dao.daoTpFinal.model.Employee.FullTimeEmployee;
-import dao.daoTpFinal.model.Employee.PartTimeEmployee;
 import dao.daoTpFinal.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +24,6 @@ public class EmployeeService {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
     }
-    public List<FullTimeEmployee> getAllFullTimeEmployees(){
-        return employeeRepository.findAllFullTimeEmployees();
-    }
 
     public Employee createEmployee(Employee employee) {
         return employeeRepository.save(employee);
@@ -51,20 +45,5 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Employee not found with id: " + id);
         }
-    }
-
-    public FullTimeEmployee createFullTimeEmployee(FullTimeEmployee employee) {
-
-        return employeeRepository.save(employee);
-    }
-
-    public PartTimeEmployee createPartTimeEmployee(PartTimeEmployee employee) {
-
-        return employeeRepository.save(employee);
-    }
-
-    public ContractEmployee createContractEmployee(ContractEmployee employee) {
-
-        return employeeRepository.save(employee);
     }
 }

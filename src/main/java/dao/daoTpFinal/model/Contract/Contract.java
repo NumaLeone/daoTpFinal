@@ -15,7 +15,7 @@ public abstract class Contract {
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date effectiveDate;
+    private Date startingDate;
 
     @Column()
     @Temporal(TemporalType.DATE)
@@ -44,12 +44,12 @@ public abstract class Contract {
         this.salary = salary;
     }
 
-    public Date getEffectiveDate() {
-        return effectiveDate;
+    public Date getStartingDate() {
+        return startingDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
-        this.effectiveDate = effectiveDate;
+    public void setStartingDate(Date startingDate) {
+        this.startingDate = startingDate;
     }
 
 

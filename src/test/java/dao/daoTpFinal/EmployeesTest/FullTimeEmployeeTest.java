@@ -1,6 +1,5 @@
 package dao.daoTpFinal.EmployeesTest;
 
-import dao.daoTpFinal.model.Employee.FullTimeEmployee;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
