@@ -2,6 +2,7 @@ package dao.daoTpFinal.model.Contract;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,14 +13,17 @@ public class ContractVersion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date postingDate;
+    private LocalDate postingDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
     private double salary;
 
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
-    public ContractVersion(Date postingDate, Date endDate, double salary) {
+    public ContractVersion(LocalDate postingDate, LocalDate endDate, double salary) {
 
         this.postingDate = postingDate;
         this.endDate = endDate;
@@ -35,11 +39,11 @@ public class ContractVersion {
         return id;
     }
 
-    public Date getPostingDate() {
+    public LocalDate getPostingDate() {
         return postingDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 

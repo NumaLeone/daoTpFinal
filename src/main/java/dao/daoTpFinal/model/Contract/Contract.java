@@ -3,6 +3,7 @@ package dao.daoTpFinal.model.Contract;
 import dao.daoTpFinal.model.Employee.Employee;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Stack;
 
@@ -16,22 +17,22 @@ public class Contract {
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date postingDate;
+    private LocalDate postingDate;
 
     @Column()
     @Temporal(TemporalType.DATE)
-    private Date endingDate;
+    private LocalDate endingDate;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-    public Stack<ContractVersion> contractVersions;
+    private Stack<ContractVersion> contractVersions;
     @Transient
     private ContractVersionFactory contractVersionFactory;
 
-    public Contract(String contractType, Date postingDate, Date endingDate, double salary) {
+    public Contract(String contractType, LocalDate postingDate, LocalDate endingDate, double salary) {
         this.postingDate=postingDate;
         this.endingDate = endingDate;
         this.contractVersions = new Stack<>();
@@ -44,24 +45,32 @@ public class Contract {
 
     }
 
-    private boolean validatePreviousVersionPostingDate(Date newPostingDate){
-        return newPostingDate.after(contractVersions.peek().getPostingDate());
+    public Stack<ContractVersion> getContractVersions() {
+        return contractVersions;
+    }
+
+    private boolean validatePreviousVersionPostingDate(LocalDate newPostingDate){
+        return newPostingDate.isAfter(contractVersions.peek().getPostingDate());
     }
 
 
-    public void createContractVersion(String contractType, Date postingDate, Date endingDate, double salary){
-        if(endingDate.after(postingDate)&& salary>0){
-            if(contractVersions.size()>0){
-                if(validatePreviousVersionPostingDate(postingDate)){
-                    contractVersions.push(contractVersionFactory.createAContractVersion(contractType, postingDate, endingDate, salary));
+
+
+    public void createContractVersion(String contractType, LocalDate postingDate, LocalDate endingDate, double salary) {
+        if (endingDate.isAfter(postingDate) && salary > 0) {
+            if (contractVersions.isEmpty() || validatePreviousVersionPostingDate(postingDate)) {
+                if (!contractVersions.isEmpty()) {
+                    contractVersions.peek().setEndDate(postingDate);
                 }
-                else throw new RuntimeException("Invalid contract");
+                contractVersions.push(contractVersionFactory.createAContractVersion(contractType, postingDate, endingDate, salary));
+            } else {
+                throw new IllegalArgumentException("Invalid contract");
             }
-            contractVersions.push(contractVersionFactory.createAContractVersion(contractType, postingDate, endingDate, salary));
+        } else {
+            throw new IllegalArgumentException("Invalid contract");
         }
-
-
     }
+
 
     public Long getId() {
         return id;
@@ -71,11 +80,11 @@ public class Contract {
         this.id = id;
     }
 
-    public Date getPostingDate() {
+    public LocalDate getPostingDate() {
         return postingDate;
     }
 
-    public Date getEndingDate(){return endingDate;}
+    public LocalDate getEndingDate(){return endingDate;}
 
     public Employee getEmployee() {
         return employee;
@@ -85,11 +94,15 @@ public class Contract {
         this.employee = employee;
     }
 
-    public void setEndingDate(Date endingDate) {
+    public void setEndingDate(LocalDate endingDate) {
         this.endingDate = endingDate;
     }
 
     public double getSalary() {
         return contractVersions.peek().getSalary();
+    }
+
+    public ContractVersion getLastVersion() {
+        return contractVersions.peek();
     }
 }
