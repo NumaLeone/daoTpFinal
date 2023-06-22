@@ -89,6 +89,5 @@ public class ContractTest {
 
         Assertions.assertEquals(1866.6666666,payroll.getTotalSalary(partTimeContract, postingDate1, endDate3), 0.3 );
 
-
     }
 }

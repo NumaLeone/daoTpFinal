@@ -32,6 +32,9 @@ public class Contract {
     @Transient
     private ContractVersionFactory contractVersionFactory;
 
+    @Transient
+    private ContractVersion redoVersion;
+
     public Contract(String contractType, LocalDate postingDate, LocalDate endingDate, double salary) {
         this.postingDate=postingDate;
         this.endingDate = endingDate;
@@ -63,11 +66,29 @@ public class Contract {
                     contractVersions.peek().setEndDate(postingDate);
                 }
                 contractVersions.push(contractVersionFactory.createAContractVersion(contractType, postingDate, endingDate, salary));
+                redoVersion = null;
             } else {
                 throw new IllegalArgumentException("Invalid contract");
             }
         } else {
             throw new IllegalArgumentException("Invalid contract");
+        }
+    }
+
+    public void undo(){
+        if(contractVersions.size()>1){
+            ContractVersion oldVersion = contractVersions.pop();
+            redoVersion = oldVersion;
+            if (contractVersions.peek().getEndDate().isAfter(LocalDate.now())) {
+                contractVersions.peek().setEndDate(null);
+            }
+        }
+    }
+
+    public void redo(){
+        if(redoVersion!= null){
+            contractVersions.push(redoVersion);
+            redoVersion=null;
         }
     }
 
